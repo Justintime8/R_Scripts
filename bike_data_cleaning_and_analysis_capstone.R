@@ -80,7 +80,7 @@ q3_2019 <-  mutate(q3_2019, ride_id = as.character(ride_id)
 q2_2019 <-  mutate(q2_2019, ride_id = as.character(ride_id)
                    ,rideable_type = as.character(rideable_type))
 
-q1_2019 <-  mutate(q2_2019, ride_id = as.character(ride_id)
+q1_2019 <-  mutate(q1_2019, ride_id = as.character(ride_id)
                    ,rideable_type = as.character(rideable_type))
 
 all_trips <- bind_rows(q2_2019, q3_2019, q4_2019, q1_2019)
