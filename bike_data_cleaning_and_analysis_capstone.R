@@ -80,7 +80,7 @@ q3_2019 <-  mutate(q3_2019, ride_id = as.character(ride_id)
 q2_2019 <-  mutate(q2_2019, ride_id = as.character(ride_id)
                    ,rideable_type = as.character(rideable_type))
 
-q1_2019 <-  mutate(q1_2019, ride_id = as.character(ride_id)
+q1_2019 <-  mutate(q2_2019, ride_id = as.character(ride_id)
                    ,rideable_type = as.character(rideable_type))
 
 all_trips <- bind_rows(q2_2019, q3_2019, q4_2019, q1_2019)
@@ -138,12 +138,35 @@ all_trips_v2$day_of_week <- ordered(all_trips_v2$day_of_week, levels=c("Sunday",
 
 aggregate(all_trips_v2$ride_length ~ all_trips_v2$member_casual + all_trips_v2$day_of_week, FUN = mean)
 
+all_trips_weekday <- filter(all_trips_v2, day_of_week %in% c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"))
+
+aggregate(all_trips_weekday$ride_length ~ all_trips_weekday$member_casual + all_trips_weekday$day_of_week, FUN = mean)
+
+
+all_trips_weekday %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarise(number_of_rides = n()
+            , average_duration = mean(ride_length)) %>%
+  arrange(member_casual, weekday)
+
+
 all_trips_v2 %>% 
   mutate(weekday = wday(started_at, label = TRUE)) %>%  
   group_by(member_casual, weekday) %>%  
   summarise(number_of_rides = n()							
             ,average_duration = mean(ride_length)) %>% 	
   arrange(member_casual, weekday)
+
+all_trips_weekday %>% 
+  mutate(weekday = wday(started_at, label =  TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarise(number_of_rides = n()
+            , average_duration = mean(ride_length)) %>% 
+  arrange(member_casual, weekday) %>% 
+  ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) +
+  geom_col(position = "dodge") + labs( title = "Ride Per Person") + 
+  theme(axis.title = element_text(size = 14), axis.text = element_text(size=12))
 
 all_trips_v2 %>% 
   mutate(weekday = wday(started_at, label = TRUE)) %>% 
@@ -162,5 +185,11 @@ all_trips_v2 %>%
   arrange(member_casual, weekday)  %>% 
   ggplot(aes(x = weekday, y = average_duration, fill = member_casual)) +
   geom_col(position = "dodge")
+
+head(all_trips$start_station_name)
+
+view(all_trips$start_station_name)
+
+
 
 
