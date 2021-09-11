@@ -175,7 +175,8 @@ all_trips_v2 %>%
             ,average_duration = mean(ride_length)) %>% 
   arrange(member_casual, weekday)  %>% 
   ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) +
-  geom_col(position = "dodge")
+  geom_col(position = "dodge") + labs( title = "Ride Per Person") + 
+  theme(axis.title = element_text(size = 14), axis.text = element_text(size=12))
 
 all_trips_v2 %>% 
   mutate(weekday = wday(started_at, label = TRUE)) %>% 
@@ -184,12 +185,13 @@ all_trips_v2 %>%
             ,average_duration = mean(ride_length)) %>% 
   arrange(member_casual, weekday)  %>% 
   ggplot(aes(x = weekday, y = average_duration, fill = member_casual)) +
-  geom_col(position = "dodge")
+  geom_col(position = "dodge") + labs( title = "Ride Duration Per Person") + 
+  theme(axis.title = element_text(size = 14), axis.text = element_text(size=12))
 
 head(all_trips$start_station_name)
 
 view(all_trips$start_station_name)
 
-
+view
 
 
